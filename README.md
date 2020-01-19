@@ -31,7 +31,7 @@ http://nginx.org/en/download.html
 
 ### replace nginx.conf (with this repo)
 
-**nginx-1.16.1/conf/nginx.conf (windows10)**
+**nginx-1.16.1/conf/nginx.conf (windows10)**  
 <img src="https://user-images.githubusercontent.com/25674959/72679312-5113c180-3af1-11ea-9822-d48d62974a4b.png" width="50%"></img>
 
 &nbsp;
@@ -92,10 +92,6 @@ http {
 
 ### click Button
 
-<img src="https://user-images.githubusercontent.com/25674959/72679251-cdf26b80-3af0-11ea-824e-fbe94d8a6aa5.png" width="50%"></img>
+<img src="https://user-images.githubusercontent.com/25674959/72679251-cdf26b80-3af0-11ea-824e-fbe94d8a6aa5.png" width="50%"></img> - Browser log
 
-(Browser log)
-
-<img src="https://user-images.githubusercontent.com/25674959/72679264-eb273a00-3af0-11ea-98f1-9d3d8ab9ab43.png" width="50%"></img>
-
-(Server log)
+<img src="https://user-images.githubusercontent.com/25674959/72679264-eb273a00-3af0-11ea-98f1-9d3d8ab9ab43.png" width="50%"></img> - Server log
