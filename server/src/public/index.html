@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Title of the document</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<body align="center">
+
+    <span class="title">NGINX limit_req Test</span>
+    <span>by Bactoria</span>
+    
+    <br/>
+    <br/>
+    <br/>
+    
+    <span>TARGET URL</span> <input class="target_url1" value="http://localhost" style="width: 200px;"></input>
+
+        <button class="attack">Request 10회</button>
+        <button class="attack2">Request 10회, 7초 후 Request 2회 (총 12회)</button>        
+        
+    </div>
+
+    <br/>
+    <br/>
+    
+    <span>TARGET URL</span> <input class="target_url2" value="http://localhost/recommend" style="width: 200px;"></input>
+
+        <button class="attack3">Request 10회</button>
+        <button class="attack4">Request 10회, 7초 후 Request 2회 (총 12회)</button>        
+    
+    <br/>
+    
+
+    <p>F12를 눌러 개발자 도구에서 확인 가능.</p>
+    <p>(log는 Info, Warnings으로 두고 보면 편함)</p>
+
+    <image src='log.png' width="20%"></image>
+
+    <br/>
+    <br/>
+
+    <p>한번에 여러 버튼을 눌렀다면, 주의해야 한다.</p>
+    <p>이전에 눌렀던 버튼으로 인해 NGINX의 burst에 Request가 남아있을 수 있기 때문</p>
+    <p>이를 해결하려면 NGINX를 재실행하거나, burst가 빌 때까지 기다리자!!</p>
+
+</body>
+
+<script>
+function curTime() {
+    return new Date().getMinutes()+'분 '+ new Date().getSeconds() + '초'
+}
+
+
+function request(TARGET_URL, cnt) {
+    console.log("요청 :: " + cnt + ' :: ' + curTime());
+   
+    $.ajax({
+            url:TARGET_URL,
+            type:'POST',
+            data: {
+                cnt
+            },
+            dataType:'json',
+            success : function(data) {
+                console.log("       응답 :: " + data + ' :: ' + curTime());
+            },
+            error:function($xhr,textStatus,errorThrown){
+                console.warn("       ERROR :: ", curTime());
+           }
+    });
+}
+
+async function attack(TARGET_URL) {
+    let cnt = 1;
+    const MAX_CNT = 10;
+
+    while(cnt <= MAX_CNT) {
+        request(TARGET_URL, cnt);
+        cnt++;
+    }
+}
+
+function waitMS(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function attack2(TARGET_URL) {
+    let cnt = 1;
+    const MAX_CNT = 10;
+
+    while(cnt <= MAX_CNT) {
+        request(TARGET_URL, cnt);
+        cnt++;
+    }
+
+    await waitMS(7000);
+
+    request(TARGET_URL, cnt++);
+    request(TARGET_URL, cnt++);
+}
+
+$('.attack').click(function(){
+    const TARGET_URL = $('.target_url1').val();
+    console.log(`------${TARGET_URL} 에 요청을 보냅니다------`);
+    attack(TARGET_URL);
+});
+
+$('.attack2').click(function(){
+    const TARGET_URL = $('.target_url1').val();
+    console.log(`------${TARGET_URL} 에 요청을 보냅니다------`);
+    attack2(TARGET_URL);
+});
+
+$('.attack3').click(function(){
+    const TARGET_URL = $('.target_url2').val();
+    console.log(`------${TARGET_URL} 에 요청을 보냅니다------`);
+    attack(TARGET_URL);
+});
+
+$('.attack4').click(function(){
+    const TARGET_URL = $('.target_url2').val();
+    console.log(`------${TARGET_URL} 에 요청을 보냅니다------`);
+    attack2(TARGET_URL);
+});
+
+</script>
+<style>
+    button {
+        margin: 25px auto;
+        padding: 10px;
+        width: 300px;
+        display: block;
+    }
+
+    .title {
+        font-size: 40px;
+        font-weight: bolder;
+        margin: 20px 5px;
+        display: block;
+    }
+</style>
+</html>
